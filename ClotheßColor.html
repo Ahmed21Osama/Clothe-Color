@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ClotheßColor</title>
+    <style>
+        * {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            transition: background 0.4s, color 0.4s;
+        }
+
+
+        .thebody {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #FFF2F2;
+            transition: background 0.4s;
+        }
+
+        .dark-mode .thebody {
+            background-color: #526D82;
+            color: white;
+        }
+
+        .top {
+            padding-top: 20px;
+            display: flex;
+            justify-content: center;
+            background-color: #FFF2F2;
+            transition: background 0.4s;
+        }
+
+        .dark-mode .top {
+            background-color: #526D82;
+        }
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #A9B5DF;
+            padding: 15px 20px;
+            border-radius: 20px;
+            transition: transform 0.3s ease-in-out, background 0.4s;
+        }
+
+        .hidden {
+            transform: translateY(-100%);
+        }
+
+        .logo {
+            position: relative;
+            color: #2D336B;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: bolder;
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            gap: 15px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #2D336B;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+
+        .dark-mode {
+            background: #2D336B;
+            color: #DDE6ED;
+        }
+
+        .nav-links a:hover {
+            background: #8595c359;
+            transition: color 0.3s;
+        }
+
+        .dark-mode .nav-links a:hover {
+            background: #607ca520;
+
+        }
+
+        .dark-mode .navbar {
+            background: #27374D;
+        }
+
+        .dark-mode .nav-links a {
+            color: #DDE6ED;
+        }
+
+        .dark-mode .navbar .logo {
+            color: #DDE6ED;
+        }
+
+        .toggle-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: bold;
+            color: #2D336B;
+            transition: background 0.3s;
+        }
+
+        .dark-mode .toggle-container {
+            color: #DDE6ED;
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 40px;
+            height: 20px;
+            background: #8593c3;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .toggle-switch::before {
+            content: "";
+            position: absolute;
+            width: 18px;
+            height: 18px;
+            background: #2D336B;
+            border-radius: 50%;
+            top: 1px;
+            left: 2px;
+            transition: transform 0.3s;
+        }
+
+        .dark-mode .toggle-switch {
+            background: #607ca5;
+        }
+
+        .dark-mode .toggle-switch::before {
+            transform: translateX(20px);
+            background: #A9B5DF;
+        }
+
+        .menu-icon {
+            display: none;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+
+
+        .name {
+            font-size: 50px;
+            color: #2D336B;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        .dark-mode .container .name {
+            color: #DDE6ED;
+        }
+
+
+        .container {
+            background: #A9B5DF;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            transition: background 0.3s, color 0.3s;
+            text-align: center;
+        }
+
+        .dark-mode .container {
+            background: #27374D;
+            color: #FFF2F2;
+        }
+
+        img {
+
+            max-width: 100%;
+            height: auto;
+            margin-top: 10px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .Choose {
+            padding: 10px;
+            background: #7886C7;
+            color: #FFF2F2;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 10px;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        .dark-mode .container .Choose {
+            background: #9DB2BF;
+            color: #526D82;
+        }
+
+        .restart {
+            padding: 10px;
+            background: #FFF2F2;
+            color: #7886C7;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 10px;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        .dark-mode .container .restart {
+            background: #526D82;
+            color: #9DB2BF;
+        }
+
+        button:hover {
+            background: #2D336B;
+        }
+
+        .dark-mode .container button:hover {
+            background-color: #DDE6ED;
+        }
+
+        .btn-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                position: fixed;
+                top: 100%;
+                left: 60%;
+                width: 30%;
+                background-color: #FFF2F2;
+                color: #000;
+                transition: background 0.3s, color 0.3s;
+                padding: 15px;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            }
+
+            .dark-mode .nav-links {
+                background: #526D82;
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .menu-icon {
+                display: block;
+                color: #2D336B;
+                transition: background 0.3s, color 0.3s;
+            }
+
+            .dark-mode .menu-icon {
+                color: #DDE6ED;
+            }
+
+
+            .toggle-container {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                margin-top: 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="top">
+        <nav class="navbar" id="navbar">
+            <div class="logo">Ahmed'sworkspace</div>
+            <span class="menu-icon" onclick="toggleMenu()">&#9776;</span>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#">Home</a></li>
+                <li><a href="./ClotheßColor.html">Clothes</a></li>
+                <li><a href="#">Services</a></li>
+                <li><a href="#">Contact</a></li>
+                <li class="toggle-container"><span>Dark Mode</span>
+                    <div class="toggle-switch" onclick="toggleDarkMode()"></div>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+    <div class="thebody">
+        <div class="container">
+            <h1 class="name">ClotheßColor</h1>
+            <div class="btn-container">
+                <button class="Choose" onclick="pickRandomPhoto()">Choose</button>
+                <button class="restart" onclick="restartCycle()">Restart</button>
+            </div>
+            <br>
+            <img id="photoDisplay" src="./photos" alt="Selected Photo" style="display: none;">
+            </br>
+        </div>
+    </div>
+
+    <script>
+
+        let lastScrollY = window.scrollY;
+        window.addEventListener("scroll", () => {
+            const navbar = document.getElementById("navbar");
+            if (window.scrollY > lastScrollY) {
+                navbar.classList.add("hidden");
+            } else {
+                navbar.classList.remove("hidden");
+            }
+            lastScrollY = window.scrollY;
+        });
+
+        const photoFolders = {
+            RED: ["photos/RED1.png", "photos/RED2.png", "photos/RED3.png", "photos/RED4.png"],
+            BLACK: ["photos/BLACK1.png", "photos/BLACK2.png", "photos/BLACK3.png"],
+            BROWN: ["photos/BROWN1.png", "photos/BROWN2.png", "photos/BROWN3.png"],
+            GREEN: ["photos/GREEN1.png", "photos/GREEN2.png", "photos/GREEN3.png"],
+            GRAY: ["photos/GRAY1.png", "photos/GRAY2.png", "photos/GRAY3.png"],
+            NAVY: ["photos/NAVY1.png", "photos/NAVY2.png"]
+        };
+
+        let foldersQueue = Object.keys(photoFolders);
+        let usedFolders = [];
+        let currentFolder = foldersQueue.shift();
+        let availablePhotos = [...photoFolders[currentFolder]];
+        document.getElementById("folderDisplay").innerText = `Current Folder: ${currentFolder}`;
+
+        function pickRandomPhoto() {
+            if (availablePhotos.length === 0) {
+                availablePhotos = [...photoFolders[currentFolder]];
+                alert(`All photos from ${currentFolder} have been shown. Restarting this folder.`);
+            }
+
+            const randomIndex = Math.floor(Math.random() * availablePhotos.length);
+            const selectedPhoto = availablePhotos.splice(randomIndex, 1)[0];
+            document.getElementById("photoDisplay").src = selectedPhoto;
+            document.getElementById("photoDisplay").style.display = "block";
+
+            usedFolders.push(currentFolder);
+            if (foldersQueue.length === 0) {
+                foldersQueue = [...usedFolders];
+                usedFolders = [];
+            }
+            currentFolder = foldersQueue.shift();
+            availablePhotos = [...photoFolders[currentFolder]];
+            document.getElementById("folderDisplay").innerText = `Current Folder: ${currentFolder}`;
+        }
+
+        function restartCycle() {
+            foldersQueue = Object.keys(photoFolders);
+            usedFolders = [];
+            currentFolder = foldersQueue.shift();
+            availablePhotos = [...photoFolders[currentFolder]];
+            document.getElementById("folderDisplay").innerText = `Current Folder: ${currentFolder}`;
+            document.getElementById("photoDisplay").style.display = "none";
+            alert("Cycle has been restarted.");
+        }
+        function toggleDarkMode() {
+            document.body.classList.toggle("dark-mode");
+        }
+        function toggleMenu() {
+            document.getElementById("navLinks").classList.toggle("active");
+        }
+    </script>
+</body>
+
+</html>
