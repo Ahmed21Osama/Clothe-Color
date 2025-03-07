@@ -13,7 +13,6 @@
             transition: background 0.4s, color 0.4s;
         }
 
-
         .thebody {
             display: flex;
             justify-content: center;
@@ -171,6 +170,7 @@
         }
 
 
+
         .container {
             background: #A9B5DF;
             padding: 20px;
@@ -186,7 +186,6 @@
         }
 
         img {
-
             max-width: 100%;
             height: auto;
             margin-top: 10px;
@@ -234,13 +233,28 @@
             background-color: #DDE6ED;
         }
 
+        #folderSelect {
+            padding: 10px;
+            background: #7886C7;
+            color: #FFF2F2;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 10px;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        .dark-mode .container #folderSelect {
+            background: #9DB2BF;
+            color: #526D82;
+        }
+
         .btn-container {
             display: flex;
             justify-content: center;
             gap: 10px;
             margin-top: 10px;
         }
-
 
         @media (max-width: 768px) {
             .nav-links {
@@ -282,7 +296,8 @@
                 align-items: center;
                 margin-top: 10px;
             }
-            .thebody{
+
+            .thebody {
                 height: 200vh;
                 display: flex;
                 justify-content: space-around;
@@ -292,6 +307,7 @@
 </head>
 
 <body>
+
     <div class="top">
         <nav class="navbar" id="navbar">
             <div class="logo">Ahmed'sworkspace</div>
@@ -314,9 +330,19 @@
             <div class="btn-container">
                 <button class="Choose" onclick="pickRandomPhoto()">Choose</button>
                 <button class="restart" onclick="restartCycle()">Restart</button>
+                <select id="folderSelect" onchange="changeFolder()">
+                    <option value="RANDOM">Random</option>
+                    <option value="RED">RED</option>
+                    <option value="BLACK">BLACK</option>
+                    <option value="BROWN">BROWN</option>
+                    <option value="GREEN">GREEN</option>
+                    <option value="GRAY">GRAY</option>
+                    <option value="NAVY">NAVY</option>
+                </select>
             </div>
             <br>
             <img id="photoDisplay" src="./photos" alt="Selected Photo" style="display: none;">
+            <p id="folderDisplay"></p>
             </br>
         </div>
     </div>
@@ -339,52 +365,71 @@
             BLACK: ["photos/BLACK1.png", "photos/BLACK2.png", "photos/BLACK3.png"],
             BROWN: ["photos/BROWN1.png", "photos/BROWN2.png", "photos/BROWN3.png"],
             GREEN: ["photos/GREEN1.png", "photos/GREEN2.png", "photos/GREEN3.png"],
-            GRAY: ["photos/GRAY1.png", "photos/GRAY2.png", "photos/GRAY3.png"],
+            GRAY: ["photos/GRAY1.png", "photos/GRAY2.png", "photos/GRAY3.png", "photos/GRAY4.png"],
             NAVY: ["photos/NAVY1.png", "photos/NAVY2.png"]
         };
 
-        let foldersQueue = Object.keys(photoFolders);
-        let usedFolders = [];
-        let currentFolder = foldersQueue.shift();
-        let availablePhotos = [...photoFolders[currentFolder]];
-        document.getElementById("folderDisplay").innerText = `Current Folder: ${currentFolder}`;
+        let currentFolder = "RANDOM";
+        let remainingPhotos = {};
+        let remainingFolders = shuffleArray(Object.keys(photoFolders));
+        let lastFolderUsed = null;
 
         function pickRandomPhoto() {
-            if (availablePhotos.length === 0) {
-                availablePhotos = [...photoFolders[currentFolder]];
-                alert(`All photos from ${currentFolder} have been shown. Restarting this folder.`);
-            }
+            if (currentFolder === "RANDOM") {
+                if (remainingFolders.length === 0) {
+                    remainingFolders = shuffleArray(Object.keys(photoFolders)); // Reset if all folders used once
+                }
 
-            const randomIndex = Math.floor(Math.random() * availablePhotos.length);
-            const selectedPhoto = availablePhotos.splice(randomIndex, 1)[0];
-            document.getElementById("photoDisplay").src = selectedPhoto;
-            document.getElementById("photoDisplay").style.display = "block";
+                let selectedFolder;
+                do {
+                    selectedFolder = remainingFolders.pop(); // Pick one folder and remove it from the list
+                } while (selectedFolder === lastFolderUsed && remainingFolders.length > 0);
 
-            usedFolders.push(currentFolder);
-            if (foldersQueue.length === 0) {
-                foldersQueue = [...usedFolders];
-                usedFolders = [];
+                lastFolderUsed = selectedFolder;
+                document.getElementById("folderDisplay").innerText = `Current Color is ${selectedFolder}`;
+
+                if (!remainingPhotos[selectedFolder] || remainingPhotos[selectedFolder].length === 0) {
+                    remainingPhotos[selectedFolder] = shuffleArray([...photoFolders[selectedFolder]]);
+                }
+
+                const selectedPhoto = remainingPhotos[selectedFolder].pop();
+                document.getElementById("photoDisplay").src = selectedPhoto;
+                document.getElementById("photoDisplay").style.display = "block";
+            } else {
+                if (!remainingPhotos[currentFolder] || remainingPhotos[currentFolder].length === 0) {
+                    remainingPhotos[currentFolder] = shuffleArray([...photoFolders[currentFolder]]);
+                }
+
+                const selectedPhoto = remainingPhotos[currentFolder].pop();
+                document.getElementById("photoDisplay").src = selectedPhoto;
+                document.getElementById("photoDisplay").style.display = "block";
             }
-            currentFolder = foldersQueue.shift();
-            availablePhotos = [...photoFolders[currentFolder]];
-            document.getElementById("folderDisplay").innerText = `Current Folder: ${currentFolder}`;
         }
 
         function restartCycle() {
-            foldersQueue = Object.keys(photoFolders);
-            usedFolders = [];
-            currentFolder = foldersQueue.shift();
-            availablePhotos = [...photoFolders[currentFolder]];
-            document.getElementById("folderDisplay").innerText = `Current Folder: ${currentFolder}`;
+            remainingPhotos = {};
+            remainingFolders = shuffleArray(Object.keys(photoFolders));
             document.getElementById("photoDisplay").style.display = "none";
             alert("Cycle has been restarted.");
         }
+
+        function changeFolder() {
+            currentFolder = document.getElementById("folderSelect").value;
+            document.getElementById("photoDisplay").style.display = "none";
+            document.getElementById("folderDisplay").innerText = `Current Color is ${currentFolder}`;
+        }
+
+        function shuffleArray(array) {
+            return array.sort(() => Math.random() - 0.5);
+        }
+
         function toggleDarkMode() {
             document.body.classList.toggle("dark-mode");
         }
         function toggleMenu() {
             document.getElementById("navLinks").classList.toggle("active");
         }
+
     </script>
 </body>
 
